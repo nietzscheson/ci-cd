@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  db:
+    image: mysql
+    volumes:
+      - $PWD/data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+  sonar:
+    image: sonarqube
+    ports:
+      - 9000:9000
+    environment:
+      - SONARQUBE_JDBC_USERNAME=sonar
+      - SONARQUBE_JDBC_PASSWORD=sonar
+      - SONARQUBE_JDBC_URL=jdbc:mysql://db:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
+  jenkins:
+    container_name: jenkins
+    image: jenkins:alpine
+    ports:
+      - 80:80
+      - 50000:50000
+    volumes:
+      - $PWD/data/jenkins:/var/jenkins_home
